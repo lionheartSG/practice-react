@@ -18,11 +18,17 @@ import Home from "./components/Home"
 import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
+import { useEffect } from "react"
 
 function Main() {
   const initialState = {
     loggedIn: Boolean(localStorage.getItem("complexappToken")),
-    flashMessages: []
+    flashMessages: [],
+    user: {
+      token: localStorage.getItem("complexappToken"),
+      username: localStorage.getItem("complexappUsername"),
+      avatar: localStorage.getItem("complexappAvatar")
+    }
   } // consist of all of our data. Live in this overall object.
 
   function ourReducer(draft, action) {
@@ -30,6 +36,7 @@ function Main() {
       case "login":
         // return { loggedIn: true, flashMessages: state.flashMessages }
         draft.loggedIn = true
+        draft.user = action.data //receive from headerloggedout
         break // or return
       case "logout":
         // return { loggedIn: false, flashMessages: state.flashMessages }
@@ -42,7 +49,19 @@ function Main() {
     }
   }
 
-  const [state, dispatch] = useImmerReducer(ourReducer, initialState) //2nd argument is initial value
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState) //2nd argument is initialstate which is declared above
+
+  useEffect(()=>{
+    if(state.loggedIn) {
+      localStorage.setItem("complexappToken", state.user.token) // first is the name of the storage, second is the item
+      localStorage.setItem("complexappUsername", state.user.username) // first is the name of the storage
+      localStorage.setItem("complexappAvatar", state.user.avatar) // first is the name of the storage
+    } else {
+      localStorage.removeItem("complexappToken") // first is the name of the storage, second is the item
+      localStorage.removeItem("complexappUsername") // first is the name of the storage
+      localStorage.removeItem("complexappAvatar") // first is the name of the storage
+    }
+  }, [state.loggedIn])
 
   // const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken"))) //initialvalue
   // const [flashMessages, setFlashMessages] = useState([])
