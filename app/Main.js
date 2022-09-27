@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from "react"
 import ReactDOM from "react-dom/client"
+import { useImmerReducer } from 'use-immer'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Axios from "axios"
 Axios.defaults.baseURL = "http://localhost:8080" // set it as a default base URL
@@ -24,18 +25,24 @@ function Main() {
     flashMessages: []
   } // consist of all of our data. Live in this overall object.
 
-  function ourReducer(state, action) {
+  function ourReducer(draft, action) {
     switch (action.type) {
       case "login":
-        return { loggedIn: true, flashMessages: state.flashMessages }
+        // return { loggedIn: true, flashMessages: state.flashMessages }
+        draft.loggedIn = true
+        break // or return
       case "logout":
-        return { loggedIn: false, flashMessages: state.flashMessages }
+        // return { loggedIn: false, flashMessages: state.flashMessages }
+        draft.loggedIn = false
+        break // or return
       case "flashMessage":
-        return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
+        // return { loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value) }
+        draft.flashMessages.push(action.value)
+        break // or return
     }
   }
 
-  const [state, dispatch] = useReducer(ourReducer, initialState) //2nd argument is initial value
+  const [state, dispatch] = useImmerReducer(ourReducer, initialState) //2nd argument is initial value
 
   // const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken"))) //initialvalue
   // const [flashMessages, setFlashMessages] = useState([])
