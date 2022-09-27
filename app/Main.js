@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useReducer } from "react"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Axios from "axios"
@@ -17,6 +17,25 @@ import FlashMessages from "./components/FlashMessages"
 import ExampleContext from "./ExampleContext"
 
 function Main() {
+  const initialState = {
+    loggedIn: Boolean(localStorage.getItem("complexappToken")),
+    flashMessages: []
+
+  } // consist of all of our data. Live in this overall object.
+
+  function ourReducer(state, action) {
+    switch(action.type) {
+      case "login":
+        return {loggedIn: true, flashMessages: state.flashMessages}
+      case "logout":
+        return {loggedIn: false, flashMessages: state.flashMessages}
+      case "flashMessage":
+        return {loggedIn: state.loggedIn, flashMessages: state.flashMessages.concat(action.value)}
+    }
+  }
+
+  const [state, dispatch] = useReducer(ourReducer, initialState) //2nd argument is initial value
+
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem("complexappToken"))) //initialvalue
   const [flashMessages, setFlashMessages] = useState([])
 
