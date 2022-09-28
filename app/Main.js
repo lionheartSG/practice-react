@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react"
+import React, { useState, useReducer, useEffect } from "react"
 import ReactDOM from "react-dom/client"
 import { useImmerReducer } from 'use-immer'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
@@ -18,7 +18,7 @@ import Home from "./components/Home"
 import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
-import { useEffect } from "react"
+import Profile from "./components/Profile"
 
 function Main() {
   const initialState = {
@@ -84,6 +84,7 @@ function Main() {
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/about-us" element={<About />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/profile/:username/*" element={<Profile />} />
           </Routes>
           <Footer />
         </BrowserRouter>
