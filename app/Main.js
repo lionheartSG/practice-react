@@ -19,6 +19,7 @@ import CreatePost from "./components/CreatePost"
 import ViewSinglePost from "./components/ViewSinglePost"
 import FlashMessages from "./components/FlashMessages"
 import Profile from "./components/Profile"
+import EditPost from "./components/EditPost"
 
 function Main() {
   const initialState = {
@@ -85,6 +86,7 @@ function Main() {
             <Route path="/about-us" element={<About />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/profile/:username/*" element={<Profile />} />
+            <Route path="/post/:id/edit" element={<EditPost />}></Route>
           </Routes>
           <Footer />
         </BrowserRouter>
